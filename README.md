@@ -1,17 +1,17 @@
-# vuex-node
+# vue-vuex-node-mongoDB-mongoose
 
-> 一个vue加node的项目
+>前端页面
 
 ## Build Setup
 
 ``` bash
-# install dependencies
+# 下载依赖
 npm install
 
-# serve with hot reload at localhost:8080
+# 运行
 npm run dev
 
-# build for production with minification
+# 打包
 npm run build
 
 # build for production and view the bundle analyzer report
