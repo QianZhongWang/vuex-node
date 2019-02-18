@@ -21,7 +21,7 @@
 					</el-form>
 					<div class="login_btn">
 						<el-button type="primary" round @click.native="register">注册</el-button>
-						<el-button type="success" round>登录</el-button>
+						<el-button type="success" round @click.native="login">登录</el-button>
 					</div>
 				</div>
 				<registerForm v-show="!isLogin" @sendCancelRegister="cancelRegister"></registerForm>
@@ -83,6 +83,24 @@ export default {
 				this.title = "登录";
 			},1000)
 			this.isLogin = true
+		},
+		login(){
+			if(this.userInfo.name&&this.userInfo.password){
+				let parma = {
+					userName:this.userInfo.name,
+					passWord:this.userInfo.password
+				}
+				this.$axios.post('/users/login',parma)
+				.then((res)=>{
+					if(res.data.status==0){
+						this.$router.push('/mallhone')
+					}else{
+						this.$message.error(res.data.msg)
+					}
+				}).catch(function(err) {
+					console.log(err)
+				})
+			}
 		}
 	}
 }
