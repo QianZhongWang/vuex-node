@@ -100,6 +100,8 @@ export default {
 				}).catch(function(err) {
 					console.log(err)
 				})
+			}else{
+				this.$message.error('请填写完整的信息')
 			}
 		}
 	}
@@ -109,19 +111,20 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .warp{
-	width: 1920px;
-	height: 938px;
+	width: 100%;
+	height: 100%;
 	background: url("./images/bg.jpg") no-repeat;
-	background-size: 100%;
+	background-size: cover;
 	position:absolute;;
 }
 .login_box{
 	position: relative;
-	top: 177px;
-	left: 800px;
+	top: 50%;
+	margin: auto;
 	z-index: 1000;
 	width: 406px;
-	height: 544px;
+	height: 550px;
+	margin-top: -300px;
 	text-align: center;
 	background: #ffffff;
 	border-radius: 5px;
