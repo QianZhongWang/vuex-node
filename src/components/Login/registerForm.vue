@@ -91,7 +91,7 @@ export default {
             let CancelToken = this.$axios.CancelToken;
 
             //使用axios的get方法获取请求结果，在请求是传入cancelToken参数
-            this.$axios.get('/users/isRightUserName',{params:{userName:val},CancelToken:new CancelToken((c)=>{
+            this.$axios.get('/apis/users/isRightUserName',{params:{userName:val},CancelToken:new CancelToken((c)=>{
                 this.cancel = c;
             })})
             .then((res)=>{
@@ -115,7 +115,7 @@ export default {
                     userName:this.userInfo.name,
                     passWord:this.userInfo.password
                 }
-                this.$axios.post('/users/register',param)
+                this.$axios.post('/apis/users/register',param)
                 .then(res=>{
                     if(res.data.status == 0){
                         this.cancenRegister()
