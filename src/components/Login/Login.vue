@@ -11,7 +11,7 @@
 					<span :class={login_line:isLogin,register_line:!isLogin}></span>
 				</div>
 				<div class="login_form" v-show="isLogin">
-					<el-form ref="userInfo" :model="userInfo" label-width="40px" :rules="rules">
+					<el-form ref="userInfo" :model="userInfo" label-width="60px" :rules="rules">
 						<el-form-item label="账号" prop="name">
 							<el-input size="small"  v-model="userInfo.name" placeholder="输入您的账号"></el-input>
 						</el-form-item>
@@ -19,6 +19,13 @@
 							<el-input size="small"  type="password" v-model="userInfo.password" placeholder="输入您的密码"></el-input>
 						</el-form-item>
 					</el-form>
+					<div class="captcha">
+						<span class="captcha_title">验证码</span>
+						<input type="text" class="captcha_input" placeholder="请输入图形验证码">
+						<div @load="verifyLoadState=true" @click="getCaptcha"  class="captcha_img" v-html="captcha">
+							
+						</div>
+					</div>
 					<div class="login_btn">
 						<el-button type="primary" round @click.native="register">注册</el-button>
 						<el-button type="success" round @click.native="login">登录</el-button>
@@ -32,7 +39,6 @@
 
 <script>
 import registerForm from './registerForm.vue'
-import { setTimeout } from 'timers';
 export default {
 	name: 'Login',
 	data () {
@@ -62,6 +68,8 @@ export default {
 				name:'',
 				password:''
 			},
+			captcha:"",
+			verifyLoadState:true,
 			rules:{
 				name:[{validator:checkUserName,trigger: 'blur'}],
 				password:[{validator:checkPassWord,trigger: 'blur'}]
@@ -71,19 +79,25 @@ export default {
 	components:{
 		registerForm
 	},
+	mounted(){
+		this.getCaptcha()
+	},
 	methods:{
+		//点击注册
 		register(){
 			setTimeout(()=>{
 				this.title = "注册";
 			},1000)
 			this.isLogin = false
 		},
+		//点击取消
 		cancelRegister(data){
 			setTimeout(()=>{
 				this.title = "登录";
 			},1000)
 			this.isLogin = true
 		},
+		//点击登录
 		login(){
 			if(this.userInfo.name&&this.userInfo.password){
 				let parma = {
@@ -103,6 +117,22 @@ export default {
 			}else{
 				this.$message.error('请填写完整的信息')
 			}
+		},
+		getCaptcha(e){
+			console.log(this.verifyLoadState)
+			if(!this.verifyLoadState) return;
+			//防止下一次重复点击
+			this.verifyLoadState = false;
+			this.$axios.get('/users/captcha')
+			.then(res=>{
+				if(res.data.status==0){
+					this.captcha = res.data.data
+					this.verifyLoadState = true;
+				}
+			})
+			.catch(err=>{
+				console.log(err)
+			})
 		}
 	}
 }
@@ -184,6 +214,38 @@ export default {
 .login_form{
 	width: 300px;
 	margin: 50px auto 0px;
+}
+.captcha{
+	width: 100%;
+	height: 40px;
+}
+.captcha_title{
+    font-size: 14px;
+    color: #606266;
+    line-height: 40px;
+    padding: 0 12px 0 0;
+}
+.captcha_input{
+	font-size: 14px;
+    background-color: #fff;
+    border-radius: 4px;
+    border: 1px solid #dcdfe6;
+    box-sizing: border-box;
+    color: #606266;
+    height: 40px;
+    line-height: 40px;
+    outline: 0;
+    padding: 0 15px;
+    transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+    width: 150px;
+}
+.captcha_img{
+	width: 80px;
+	height: 38px;
+	border:1px solid #dcdfe6;
+	outline: 0;
+	border-radius: 4px;
+	float: right;
 }
 .login_btn{
 	margin-top: 60px;
