@@ -9,7 +9,7 @@ import Axios from "axios"
 // import store from './store'
 Vue.config.productionTip = false
 Vue.use(ElementUI)
-Axios.defaults.baseURL="http://127.0.0.1:3000"
+
 Vue.prototype.$axios = Axios
 
 /* eslint-disable no-new */

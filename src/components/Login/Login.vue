@@ -21,10 +21,11 @@
 					</el-form>
 					<div class="captcha">
 						<span class="captcha_title">验证码</span>
-						<input type="text" class="captcha_input" placeholder="请输入图形验证码">
-						<div @load="verifyLoadState=true" @click="getCaptcha"  class="captcha_img" v-html="captcha">
-							
-						</div>
+						<input type="text" class="captcha_input" v-model="captcha_pass" placeholder="请输入图形验证码">
+						<div @load="verifyLoadState=true" @click="getCaptcha"  class="captcha_img" v-html="captcha"></div>
+					</div>
+					<div class="tips">
+						<i></i>
 					</div>
 					<div class="login_btn">
 						<el-button type="primary" round @click.native="register">注册</el-button>
@@ -70,6 +71,7 @@ export default {
 			},
 			captcha:"",
 			verifyLoadState:true,
+			captcha_pass:"",
 			rules:{
 				name:[{validator:checkUserName,trigger: 'blur'}],
 				password:[{validator:checkPassWord,trigger: 'blur'}]
@@ -99,16 +101,18 @@ export default {
 		},
 		//点击登录
 		login(){
-			if(this.userInfo.name&&this.userInfo.password){
+			if(this.userInfo.name&&this.userInfo.password&&this.captcha_pass){
 				let parma = {
 					userName:this.userInfo.name,
-					passWord:this.userInfo.password
+					passWord:this.userInfo.password,
+					captcha:this.captcha_pass
 				}
-				this.$axios.post('/users/login',parma)
+				this.$axios.post('/apis/users/login',parma)
 				.then((res)=>{
 					if(res.data.status==0){
 						this.$router.push('/mallhone')
 					}else{
+						this.getCaptcha();
 						this.$message.error(res.data.msg)
 					}
 				}).catch(function(err) {
@@ -118,16 +122,17 @@ export default {
 				this.$message.error('请填写完整的信息')
 			}
 		},
-		getCaptcha(e){
-			console.log(this.verifyLoadState)
+		getCaptcha(){
 			if(!this.verifyLoadState) return;
 			//防止下一次重复点击
 			this.verifyLoadState = false;
-			this.$axios.get('/users/captcha')
+			this.$axios.get("/apis/users/captcha")
 			.then(res=>{
 				if(res.data.status==0){
-					this.captcha = res.data.data
+					this.captcha = res.data.msg
 					this.verifyLoadState = true;
+				}else{
+					this.$message.error(res.data.msg)
 				}
 			})
 			.catch(err=>{
