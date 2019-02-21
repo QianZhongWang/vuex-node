@@ -110,6 +110,9 @@ export default {
 				this.$axios.post('/apis/users/login',parma)
 				.then((res)=>{
 					if(res.data.status==0){
+						console.log(res.data)
+						localStorage.setItem('token',res.data.token)
+						localStorage.setItem('userName',res.data.userName)
 						this.$router.push('/mallhone')
 					}else{
 						this.getCaptcha();
