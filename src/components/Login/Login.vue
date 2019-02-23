@@ -22,7 +22,7 @@
 					<div class="captcha">
 						<span class="captcha_title">验证码</span>
 						<input type="text" class="captcha_input" v-model="captcha_pass" placeholder="请输入图形验证码">
-						<div @load="verifyLoadState=true" @click="getCaptcha"  class="captcha_img" v-html="captcha"></div>
+						<div  @click="changeCaptcha"  class="captcha_img" v-html="captcha"></div>
 					</div>
 					<div class="tips">
 						<i></i>
@@ -40,6 +40,9 @@
 
 <script>
 import registerForm from './registerForm.vue'
+import {mapActions,mapState} from "vuex"
+
+
 export default {
 	name: 'Login',
 	data () {
@@ -69,8 +72,7 @@ export default {
 				name:'',
 				password:''
 			},
-			captcha:"",
-			verifyLoadState:true,
+			// captcha:"",
 			captcha_pass:"",
 			rules:{
 				name:[{validator:checkUserName,trigger: 'blur'}],
@@ -82,9 +84,15 @@ export default {
 		registerForm
 	},
 	mounted(){
+		// this.getCaptcha()
+		//this.$store.dispatch('getCaptcha') //第一种写法
 		this.getCaptcha()
 	},
+	computed:{
+		...mapState(["captcha"])
+	},
 	methods:{
+		...mapActions(['getCaptcha']),
 		//点击注册
 		register(){
 			setTimeout(()=>{
@@ -125,22 +133,9 @@ export default {
 				this.$message.error('请填写完整的信息')
 			}
 		},
-		getCaptcha(){
-			if(!this.verifyLoadState) return;
-			//防止下一次重复点击
-			this.verifyLoadState = false;
-			this.$axios.get("/apis/users/captcha")
-			.then(res=>{
-				if(res.data.status==0){
-					this.captcha = res.data.msg
-					this.verifyLoadState = true;
-				}else{
-					this.$message.error(res.data.msg)
-				}
-			})
-			.catch(err=>{
-				console.log(err)
-			})
+		//改变验证码
+		changeCaptcha(){
+			this.getCaptcha()
 		}
 	}
 }
