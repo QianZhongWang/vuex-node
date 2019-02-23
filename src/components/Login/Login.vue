@@ -40,9 +40,8 @@
 
 <script>
 import registerForm from './registerForm.vue'
-import {mapActions,mapState} from "vuex"
-
-
+import {mapActions,mapState, mapMutations} from "vuex"
+import {reqCaptcha,reqLogin} from "../../api"
 export default {
 	name: 'Login',
 	data () {
@@ -54,7 +53,6 @@ export default {
 			}
 		};
 		let checkPassWord = (rule,value,cb)=>{
-			console.log(value)
 			if(!value){
 				return cb(new Error('密码不能为空'))
 			}else{
@@ -72,7 +70,7 @@ export default {
 				name:'',
 				password:''
 			},
-			// captcha:"",
+			captcha:"",
 			captcha_pass:"",
 			rules:{
 				name:[{validator:checkUserName,trigger: 'blur'}],
@@ -84,15 +82,15 @@ export default {
 		registerForm
 	},
 	mounted(){
-		// this.getCaptcha()
-		//this.$store.dispatch('getCaptcha') //第一种写法
-		this.getCaptcha()
+		this.changeCaptcha()
+		
 	},
 	computed:{
-		...mapState(["captcha"])
+		// ...mapState(["token,userName"])
 	},
 	methods:{
-		...mapActions(['getCaptcha']),
+		// ...mapActions(['Login']),
+		...mapMutations(["recive_username","recive_token"]),
 		//点击注册
 		register(){
 			setTimeout(()=>{
@@ -115,19 +113,18 @@ export default {
 					passWord:this.userInfo.password,
 					captcha:this.captcha_pass
 				}
-				this.$axios.post('/apis/users/login',parma)
-				.then((res)=>{
-					if(res.data.status==0){
-						console.log(res.data)
-						localStorage.setItem('token',res.data.token)
-						localStorage.setItem('userName',res.data.userName)
-						this.$router.push('/mallhone')
+				reqLogin(parma).then(res=>{
+					if(res.status == 0){
+						console.log(res)
+						this.recive_username(res.userName);
+						this.recive_token(res.token)
+						this.$router.push('/mallhome')
 					}else{
-						this.getCaptcha();
-						this.$message.error(res.data.msg)
+						this.changeCaptcha()
+						this.$message.error(res.msg)
 					}
-				}).catch(function(err) {
-					console.log(err)
+				}).catch(err=>{
+					this.$message.error(err)
 				})
 			}else{
 				this.$message.error('请填写完整的信息')
@@ -135,7 +132,15 @@ export default {
 		},
 		//改变验证码
 		changeCaptcha(){
-			this.getCaptcha()
+			reqCaptcha().then(res=>{
+				if(res.status == 0){
+					this.captcha = res.msg;
+				}else{
+					this.$message.error('获取图形验证码失败')
+				}
+			}).catch(err=>{
+				this.$message.error(err)
+			})
 		}
 	}
 }

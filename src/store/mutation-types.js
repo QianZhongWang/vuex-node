@@ -3,5 +3,4 @@
  */
 export const RECIVE_USERNAME = "recive_username";
 export const RECIVE_TOKEN = "recive_token";
-export const RECIVE_CAPTCHA = "recive_captcha"
 

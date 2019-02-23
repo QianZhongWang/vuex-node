@@ -4,21 +4,29 @@
 import{
     RECIVE_USERNAME,
     RECIVE_TOKEN,
-    RECIVE_CAPTCHA
-} from './mutatio-types'
+} from './mutation-types'
 import{
-    reqCaptcha,
     reqLogin,
 }from "../api/index"
 export default{
-    //异步获取验证码
-    async getCaptcha({commit}){
-        const result = await reqCaptcha()
-        //提交mutation
-        if(result.status == 0){
-            const captcha = result.msg
-            commit( RECIVE_CAPTCHA,{captcha})
-        }
-    },
+    // //异步获取验证码
+    // async getCaptcha({commit}){
+    //     const result = await reqCaptcha()
+    //     //提交mutation
+    //     if(result.status == 0){
+    //         const captcha = result.msg
+    //         commit( RECIVE_CAPTCHA,{captcha})
+    //     }
+    // },
     
+
+    //登录
+    // Login({commit},state){
+    //     const result = reqLogin();
+    //     const token = result.token;
+    //     const userName = result.userName;
+    //     commit( RECIVE_USERNAME,{userName})
+    //     commit( RECIVE_TOKEN,{token})
+    // }
+
 }

@@ -4,16 +4,13 @@
 import{
     RECIVE_USERNAME,
     RECIVE_TOKEN,
-    RECIVE_CAPTCHA
-} from './mutatio-types'
+} from './mutation-types'
 export default{
-    [RECIVE_USERNAME] ( state, {userName}) {
+    [RECIVE_USERNAME] ( state, userName) {
         state.userName = userName
     },
-    [RECIVE_TOKEN] ( state, {token}) {
+    [RECIVE_TOKEN] ( state, token) {
         state.token = token
     },
-    [RECIVE_CAPTCHA] (state,{captcha}){
-        state.captcha = captcha
-    }
+   
 }
