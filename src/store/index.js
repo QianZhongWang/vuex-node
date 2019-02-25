@@ -12,7 +12,7 @@ import getters from "./getters"
 import VuexPersist from "vuex-persist"
 Vue.use(Vuex)
 
-//创建一个对象并进行配置
+// //创建一个对象并进行配置
 const vuexLocal = new VuexPersist({
     supportCircular:true,
     storage:window.localStorage

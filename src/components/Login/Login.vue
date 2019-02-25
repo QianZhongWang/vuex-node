@@ -118,8 +118,6 @@ export default {
 						console.log(res)
 						this.recive_username(res.userName);
 						this.recive_token(res.token);
-						// localStorage.setItem('token',res.token)
-						// localStorage.setItem('userName',res.userName)
 						this.$router.push('/mallhome')
 					}else{
 						this.changeCaptcha()

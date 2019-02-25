@@ -4,6 +4,38 @@
  */
 
  import axios from "axios"
+import store from "../store";
+
+
+
+//请求拦截器
+axios.interceptors.request.use(
+    config => {
+        if(store.state.token){//判断token是否存在，如果存在的话。则每个http header都加上token
+            config.headers.Authorization=`${store.state.token}`
+        }
+
+        return config;
+    },
+    error=>{
+        return Promise.reject(error)
+    }
+)
+
+//响应拦截器
+axios.interceptors.response.use(
+    response=>{
+        console.log(response)
+        return response
+    },
+    error=>{
+        if(error.response){
+            console.log(error.response)
+        }
+        return Promise.reject(error.response.data)
+    }
+)
+
  export default function ajax( url, params = {}, type="get"){
 
     return new Promise((resolve,reject)=>{
