@@ -21,6 +21,7 @@
   </div>
 </template>
 <script>
+import {reqregister} from "../../api"
 export default {
     name: "registerForm",
     data() {
@@ -115,12 +116,12 @@ export default {
                     userName:this.userInfo.name,
                     passWord:this.userInfo.password
                 }
-                this.$axios.post('/apis/users/register',param)
-                .then(res=>{
-                    if(res.data.status == 0){
+                
+                reqregister(param).then(res=>{
+                    if(res.status == 0){
                         this.cancenRegister()
                     }else{
-                        this.$message.error(res.data.msg)
+                        this.$message.error(res.msg)
                     }
                 }).catch(err=>{
                     console.log(err)
