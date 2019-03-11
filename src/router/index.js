@@ -19,6 +19,7 @@ const router = new Router({
       name:'home',
       meta:{
         requireAuth:true, //添加该字段，表示进入该路由是需要登录的
+        info:["日记","游戏"]
       },
       component:Home
     }
